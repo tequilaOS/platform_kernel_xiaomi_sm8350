@@ -1770,7 +1770,7 @@ static void fts_restore_mode_value(int mode, int value_type)
 		xiaomi_touch_interfaces.touch_mode[mode][value_type];
 }
 
-static void fts_restore_normal_mode(int)
+static void fts_restore_normal_mode(int mode)
 {
 	int i;
 
@@ -1787,7 +1787,7 @@ static void fts_write_touchfeature_reg(int mode)
 	case Touch_Game_Mode:
 		ret = fts_write_reg(FTS_REG_GAME_MODE_EN, temp_value);
 		if (!temp_value)
-			fts_restore_normal_mode();
+			fts_restore_normal_mode(mode);
 		break;
 	case Touch_UP_THRESHOLD:
 		ret = fts_write_reg(FTS_REG_SENSIVITY, temp_value);
@@ -1926,7 +1926,7 @@ static int fts_set_cur_value(int mode, int value)
 static int fts_reset_mode(int mode)
 {
 	if (mode == Touch_Game_Mode) {
-		fts_restore_normal_mode();
+		fts_restore_normal_mode(mode);
 	} else if (mode < Touch_Report_Rate) {
 		fts_restore_mode_value(mode, GET_DEF_VALUE);
 	} else {
